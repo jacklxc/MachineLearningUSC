@@ -83,7 +83,7 @@ def test_error(w, X, y):
     - err: the mean square error
     """
   prediction = np.dot(w,X.T)
-  err = np.sum(np.square(y - prediction))
+  err = np.mean(np.square(y - prediction))
   return err
 
 
