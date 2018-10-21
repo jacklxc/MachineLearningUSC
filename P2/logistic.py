@@ -71,13 +71,13 @@ def binary_train(X, y, w0=None, b0=None, step_size=0.5, max_iterations=1000):
     w = wb[1:]
     b = wb[0]
     """
+    
     for step in range(max_iterations):
         sig_term = sigmoid(np.dot(X,w.T)+b) -y # Shape (N,)
         gradient_w = np.dot(sig_term,X)
         # GD
-        w = w - step_size * gradient_w
-        b = b - step_size * np.sum(sig_term)
-
+        w = w - step_size * gradient_w / N
+        b = b - step_size * np.sum(sig_term) / N
 
     assert w.shape == (D,)
     return w, b
@@ -98,7 +98,7 @@ def binary_predict(X, w, b):
     """
     TODO: add your code here
     """
-    preds[sigmoid(np.dot(X,w.T) + b) > 0.5] = 1
+    preds[sigmoid(np.dot(X,w.T) + b) >= 0.5] = 1
 
     assert preds.shape == (N,) 
     return preds
@@ -156,9 +156,9 @@ def multinomial_train(X, y, C,
         probs = scores_exp / denominator.reshape(-1,1) # shape (N,C)
         probs[np.arange(N),y.astype(int)]-=1
         gradient_w = np.dot(probs.T,X)
-        w -= step_size * gradient_w
+        w -= step_size * gradient_w / N
         gradient_b = np.sum(probs,axis=0)
-        b -= step_size * gradient_b
+        b -= step_size * gradient_b / N
 
     assert w.shape == (C, D)
     assert b.shape == (C,)
