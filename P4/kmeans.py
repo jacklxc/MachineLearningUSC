@@ -123,18 +123,18 @@ class KMeansClassifier():
         # DONOT CHANGE CODE ABOVE THIS LINE
         kmeans = KMeans(self.n_cluster, self.max_iter, self.e)
         centroids, membership, _ = kmeans.fit(x)
-        r = -np.ones((self.n_cluster, N))
+        r = np.zeros((self.n_cluster, N))
         r[membership,np.arange(N)] = 1
-        label_matrix = r * y.reshape(1,-1)
+        label_matrix = r * (y+1).reshape(1,-1)
         centroid_labels = []
         for k in range(self.n_cluster):
             to_choose = label_matrix[k,:]
-            mask = to_choose >=0
+            mask = to_choose >0
             cluster_labels = to_choose[mask]
             (_, idx, counts) = np.unique(cluster_labels, return_index=True, return_counts=True)
             index = idx[np.argmax(counts)]
             centroid_labels.append(cluster_labels[index])
-        centroid_labels = np.array(centroid_labels)
+        centroid_labels = np.array(centroid_labels) - 1 
         # DONOT CHANGE CODE BELOW THIS LINE
 
         self.centroid_labels = centroid_labels
