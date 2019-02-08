@@ -21,11 +21,15 @@ def pca(X = np.array([]), no_dims = 50):
     M = np.array([])
 
     """TODO: write your code here"""
-    cov = np.dot(X.T,X)
-    eigen_value, eigen_vector = np.linalg.eig(cov)
-    indices = np.argsort(eigen_value)[::-1][:no_dims]
-    M = eigen_vector[:,indices]
-    Y = np.dot(X,M)
+
+    S = np.dot(X.T, X) / (len(X) - 1)
+    lambdas, vectors = np.linalg.eig(S)
+
+    idx = np.argsort(lambdas)[::-1][:no_dims]
+    M = vectors[:, idx]
+
+    Y = np.dot(X, M)
+    
     return Y, M
 
 def decompress(Y = np.array([]), M = np.array([])):
